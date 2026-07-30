@@ -10,7 +10,7 @@ Most academic and industry work on airline disruption management relies on synth
 
 ## Architecture
 
-![System Architecture](architecture.png)
+![System Architecture](Project_workflow_architecture.jpg)
 
 **Phase 1 — Detect, Monitor & Predict** (in progress)
 - Ingests BTS On-Time Performance data, FAA OPSNET, NOAA METAR weather data, and OpenSky flight-tracking data
