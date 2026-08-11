@@ -10,13 +10,14 @@ Most academic and industry work on airline disruption management relies on synth
 
 ## Architecture
 
-![System Architecture](Project_workflow_architecture.jpg)
+![System Architecture](Project_workflow_architecture_updated.jpg)
 
 **Phase 1 — Detect, Monitor & Predict** (in progress)
-- Ingests BTS On-Time Performance data, FAA OPSNET, NOAA METAR weather data, and OpenSky flight-tracking data
+- Ingests BTS On-Time Performance data (implemented) and NOAA METAR weather data (in progress)
 - Classifies delay type and severity, flags impacted downstream flights
 - Real-time operations dashboard (Plotly)
 - Predictive delay model (XGBoost / LightGBM)
+- OpenSky flight-tracking data and FAA OPSNET airport-capacity/ground-stop data are planned enrichments — see [Data Sources](#data-sources) for current status of each
 
 **Phase 2 — Respond, Rebook & Retain** (planned)
 - LLM-powered decision agent for passenger triage and rebooking
@@ -24,10 +25,13 @@ Most academic and industry work on airline disruption management relies on synth
 - Customer-facing dashboard with predicted recovery time
 
 ## Data Sources
-- [BTS On-Time Performance Data](https://www.transtats.bts.gov/DL_SelectFields.aspx?gnoyr_VQ=FGJ)
-- [NOAA Aviation Weather Center METAR API](https://aviationweather.gov/data/api/)
-- [OpenSky Network](https://opensky-network.org/data)
-- [FAA OPSNET](https://aspm.faa.gov/opsnet/sys/Main.asp)
+
+| Source | Status | Notes |
+|---|---|---|
+| [BTS On-Time Performance Data](https://www.transtats.bts.gov/DL_SelectFields.aspx?gnoyr_VQ=FGJ) | ✅ Implemented | 10.5M+ flight records cleaned and loaded via direct PREZIP download |
+| [NOAA Aviation Weather Center METAR API](https://aviationweather.gov/data/api/) | ⚠️ In progress | Fetch pipeline built; being finalized |
+| [OpenSky Network](https://opensky-network.org/data) | 🔲 Planned | Live flight-position enrichment, not yet integrated |
+| [FAA OPSNET / ASPM](https://www.aspm.faa.gov/opsnet/sys/Main.asp) | 🔲 Planned | No public API — data is exported manually per airport/date range via the OPSNET web reporting tool as daily, facility-level delay-by-cause figures, then joined in as a daily airport-level feature (not a per-flight join) |
 
 ## Tech Stack
 Python, Pandas, XGBoost, LightGBM, Plotly, fastparquet, Google Colab
