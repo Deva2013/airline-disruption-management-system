@@ -13,7 +13,7 @@ Most academic and industry work on airline disruption management relies on synth
 ![System Architecture](Project_workflow_architecture_updated.jpg)
 
 **Phase 1 — Detect, Monitor & Predict** (in progress)
-- Ingests BTS On-Time Performance data (implemented) and NOAA METAR weather data (in progress)
+- Ingests BTS On-Time Performance data (implemented) and historical METAR weather data via the Iowa Environmental Mesonet ASOS archive (in progress)
 - Classifies delay type and severity, flags impacted downstream flights
 - Real-time operations dashboard (Plotly)
 - Predictive delay model (XGBoost / LightGBM)
@@ -29,7 +29,7 @@ Most academic and industry work on airline disruption management relies on synth
 | Source | Status | Notes |
 |---|---|---|
 | [BTS On-Time Performance Data](https://www.transtats.bts.gov/DL_SelectFields.aspx?gnoyr_VQ=FGJ) | ✅ Implemented | 10.5M+ flight records cleaned and loaded via direct PREZIP download |
-| [NOAA Aviation Weather Center METAR API](https://aviationweather.gov/data/api/) | ⚠️ In progress | Fetch pipeline built; being finalized |
+| [Iowa Environmental Mesonet — ASOS/METAR Archive](https://mesonet.agron.iastate.edu/request/download.phtml) | ⚠️ In progress | Replaces the NOAA Aviation Weather Data API, which only serves ~15 days of live METAR observations and cannot return historical data back to 2022. IEM provides true historical depth (2022+), CSV output, no login required |
 | [OpenSky Network](https://opensky-network.org/data) | 🔲 Planned | Live flight-position enrichment, not yet integrated |
 | [FAA OPSNET / ASPM](https://www.aspm.faa.gov/opsnet/sys/Main.asp) | 🔲 Planned | No public API — data is exported manually per airport/date range via the OPSNET web reporting tool as daily, facility-level delay-by-cause figures, then joined in as a daily airport-level feature (not a per-flight join) |
 
