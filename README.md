@@ -15,7 +15,7 @@ Most academic and industry work on airline disruption management relies on synth
 
 ## Architecture
 
-![System Architecture](Project_workflow_architecture_updated.jpg)
+   ![System Architecture](Project_workflow_architecture.jpg)
 
 **Phase 1 — Detect, Monitor & Predict** ✅ Complete
 - Ingests BTS On-Time Performance data (including aircraft tail number) and historical METAR weather data via the Iowa Environmental Mesonet (IEM) ASOS archive
