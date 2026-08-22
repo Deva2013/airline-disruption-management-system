@@ -161,10 +161,15 @@ with tab1:
         title="Hub Airports — Delay Rate (color) & Flight Volume (size)",
         geo=dict(
             scope="usa", projection_type="albers usa",
-            landcolor="#f1f5f9", subunitcolor="white", countrycolor="white",
+            showland=True, landcolor="#e2e8f0",
+            showsubunits=True, subunitcolor="#94a3b8", subunitwidth=1,
+            showcountries=True, countrycolor="#64748b",
+            showlakes=True, lakecolor="#ffffff",
+            bgcolor="#ffffff",
         ),
         height=460, font=dict(family=FONT_FAMILY),
         margin=dict(t=50, l=10, r=10, b=10),
+        paper_bgcolor="#ffffff",
     )
     st.plotly_chart(fig_map, use_container_width=True)
     st.caption("Marker size reflects flight volume (scaled), color reflects delay rate. Hover for exact figures per airport.")
