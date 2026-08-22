@@ -8,6 +8,7 @@ A faculty-mentored research project applying real public aviation data to build 
 
 - **[Operations Dashboard](https://deva2013.github.io/airline-disruption-management-system/phase1_dashboard.html)** — historical KPIs: delay rates by airport, severity breakdown, seasonal trends, hour × airport heatmap
 - **[Predictive Risk Dashboard](https://deva2013.github.io/airline-disruption-management-system/phase1_predictive_risk_dashboard.html)** — model output: ROC-AUC, feature importance, flagging outcomes, actual vs. flagged risk by airport
+- **[Interactive Dashboard](https://airline-disruption-management-system-dashboard.streamlit.app/)** — cross-filtering by airport and date range, with a US map view; built with Streamlit
 
 ## Overview
 
