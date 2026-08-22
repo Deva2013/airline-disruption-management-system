@@ -30,6 +30,20 @@ FONT_FAMILY = "Helvetica Neue, Arial, sans-serif"
 
 HF_BASE = "https://huggingface.co/datasets/Dev123Hug456Face/airline-disruption-data/resolve/main"
 
+# Approximate coordinates for each hub airport (for the geographic map)
+AIRPORT_COORDS = {
+    "JFK": (40.6413, -73.7781),
+    "ORD": (41.9742, -87.9073),
+    "ATL": (33.6407, -84.4277),
+    "LAX": (33.9416, -118.4085),
+    "DFW": (32.8998, -97.0403),
+    "SFO": (37.6213, -122.3790),
+    "EWR": (40.6895, -74.1745),
+    "MIA": (25.7959, -80.2870),
+    "SEA": (47.4502, -122.3088),
+    "BOS": (42.3656, -71.0096),
+}
+
 # ── Data loading (cached so it only downloads once per session) ────────
 @st.cache_data
 def load_data():
@@ -114,6 +128,47 @@ st.markdown("---")
 tab1, tab2 = st.tabs(["📊 Operations", "🎯 Predictive Risk (2024)"])
 
 with tab1:
+    # ── Geographic map: delay rate + volume across the 10 hub airports ──
+    map_data = (
+        ops_filtered.groupby("Origin")
+        .agg(TotalFlights=("TotalFlights", "sum"), DelayedFlights=("DelayedFlights", "sum"))
+        .assign(DelayRate=lambda d: d["DelayedFlights"] / d["TotalFlights"] * 100)
+        .reset_index()
+    )
+    map_data["Lat"] = map_data["Origin"].map(lambda a: AIRPORT_COORDS[a][0])
+    map_data["Lon"] = map_data["Origin"].map(lambda a: AIRPORT_COORDS[a][1])
+    # Marker size scaled by sqrt of volume so the busiest hub doesn't visually swamp the rest
+    map_data["MarkerSize"] = 18 + 32 * np.sqrt(map_data["TotalFlights"] / map_data["TotalFlights"].max())
+
+    fig_map = go.Figure(go.Scattergeo(
+        lon=map_data["Lon"], lat=map_data["Lat"],
+        text=map_data.apply(
+            lambda r: f"<b>{r['Origin']}</b><br>Delay rate: {r['DelayRate']:.1f}%<br>Flights: {r['TotalFlights']:,.0f}",
+            axis=1,
+        ),
+        mode="markers",
+        marker=dict(
+            size=map_data["MarkerSize"],
+            color=map_data["DelayRate"],
+            colorscale="YlOrRd",
+            cmin=0, cmax=max(30, map_data["DelayRate"].max()),
+            colorbar=dict(title="Delay<br>Rate (%)", thickness=14, len=0.7),
+            line=dict(color="white", width=1),
+        ),
+        hoverinfo="text",
+    ))
+    fig_map.update_layout(
+        title="Hub Airports — Delay Rate (color) & Flight Volume (size)",
+        geo=dict(
+            scope="usa", projection_type="albers usa",
+            landcolor="#f1f5f9", subunitcolor="white", countrycolor="white",
+        ),
+        height=460, font=dict(family=FONT_FAMILY),
+        margin=dict(t=50, l=10, r=10, b=10),
+    )
+    st.plotly_chart(fig_map, use_container_width=True)
+    st.caption("Marker size reflects flight volume (scaled), color reflects delay rate. Hover for exact figures per airport.")
+
     col1, col2 = st.columns(2)
 
     with col1:
