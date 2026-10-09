@@ -13,9 +13,13 @@ WITH daily AS (
 SELECT
   *,
   ROUND(delayed_flights / flights_operated * 100, 1) AS pct_delayed_daily,
-  ROUND(
-    SUM(delayed_flights)  OVER w
-    / SUM(flights_operated) OVER w * 100, 1
+    IF(
+    COUNT(*) OVER w = 7,
+    ROUND(
+      SUM(delayed_flights)  OVER w
+      / SUM(flights_operated) OVER w * 100, 1
+    ),
+    NULL
   ) AS pct_delayed_rolling_7d
 FROM daily
 WINDOW w AS (
